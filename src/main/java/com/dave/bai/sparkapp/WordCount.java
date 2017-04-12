@@ -33,7 +33,7 @@ public class WordCount {
 
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        JavaRDD<String> hemingwayInput = sc.textFile("src/test/resources/wordcount/theOldManAndTheSea.txt");
+        JavaRDD<String> hemingwayInput = sc.textFile("src/main/resources/wordcount/theOldManAndTheSea.txt");
 
         // split by whitespace into words
         long wordsCount = hemingwayInput.flatMap(new NovelTextSplitter()).cache().count();
