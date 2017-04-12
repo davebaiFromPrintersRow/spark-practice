@@ -50,7 +50,9 @@ public class WordCount {
 
         assertEquals(finalWordCount.count(), collectEveryWord.distinct().count());
 
-        LOGGER.info("Total partitions size before coalesce: {}", finalWordCount.partitions().size());
+        LOGGER.info("Total partitions size BEFORE coalesce: {}", finalWordCount.partitions().size());
+        finalWordCount.coalesce(100).cache();
+        LOGGER.info("Total partitions size AFTER coalesce: {}", finalWordCount.partitions().size());
 
         List<Tuple2<String, Integer>> collectFinalWordCount = finalWordCount.collect();
 
