@@ -29,6 +29,7 @@ public class WordCountV2Lambda {
         JavaRDD<String> hemingwayInput = sc.textFile("src/main/resources/wordcount/theOldManAndTheSea.txt");
 
         JavaPairRDD<String, Integer> wcMap = hemingwayInput.flatMap(words -> Arrays.asList(words.split(" ")).iterator())
+            .map(filteredWords -> filteredWords.replaceAll("[^a-zA-Z0-9]+", ""))
             .mapToPair(word -> new Tuple2<>(word, 1))
             .reduceByKey((x, y) -> x + y).cache();
 
@@ -36,6 +37,8 @@ public class WordCountV2Lambda {
         for (Tuple2<String, Integer> wcRecord : collectWc) {
             LOGGER.info("word: {}, count: {}", wcRecord._1(), wcRecord._2());
         }
+
+        LOGGER.info("distinct words: {}", collectWc.size());
 
         sc.stop();
         sc.close();
